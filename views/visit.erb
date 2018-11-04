@@ -32,8 +32,8 @@
   <div class="form-group">
     <label>Select barber:</label>
     <select name="barber" class="form-control">
-    <% @barbersdb.each do |row| %>
-      <option><%= row["barber"] %></option>
+    <% @barbers.each do |barber| %>
+      <option><%= barber.name %></option>
     <% end %>
     </select>
   </div>
