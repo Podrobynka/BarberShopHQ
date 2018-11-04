@@ -6,10 +6,10 @@ require 'sinatra/activerecord'
 set :database, 'sqlite3:barbershop.db'
 
 class Client < ActiveRecord::Base
-  validates :name, presents: true
-  validates :phone, presents: true
-  validates :datestamp, presents: true
-  validates :color, presents: true
+  validates :name, presence: true
+  validates :phone, presence: true
+  validates :datestamp, presence: true
+  validates :color, presence: true
 end
 
 class Barber < ActiveRecord::Base
@@ -35,11 +35,15 @@ post '/visit' do
   @username = params[:name]
   @datetime = params[:datestamp]
 
-  Client.create(params)
-
-  @title = 'Thank you!'
-  @message = "Dear #{@username}, we'll waiting for you at #{@datetime}."
-  erb :visit
+  c = Client.new(params)
+  if c.save
+    @title = 'Thank you!'
+    @message = "Dear #{@username}, we'll waiting for you at #{@datetime}."
+    erb :visit
+  else
+    @error = c.errors.full_messages.first
+    erb :visit
+  end
 end
 
 get '/contacts' do
