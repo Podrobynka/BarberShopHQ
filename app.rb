@@ -28,6 +28,7 @@ get '/' do
 end
 
 get '/visit' do
+  @c = Client.new
   erb :visit
 end
 
@@ -35,13 +36,13 @@ post '/visit' do
   @username = params[:name]
   @datetime = params[:datestamp]
 
-  c = Client.new(params)
-  if c.save
+  @c = Client.new(params)
+  if @c.save
     @title = 'Thank you!'
     @message = "Dear #{@username}, we'll waiting for you at #{@datetime}."
     erb :visit
   else
-    @error = c.errors.full_messages.first
+    @error = @c.errors.full_messages.first
     erb :visit
   end
 end
